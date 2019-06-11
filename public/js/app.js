@@ -1782,14 +1782,6 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
 //
 //
 //
-//
-//
-//
-//
-//
-//
-//
-//
 /* harmony default export */ __webpack_exports__["default"] = ({
   data: function data() {
     return {
@@ -1814,11 +1806,7 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
       },
       timestamps: [],
       // will hold any timestamps or 'laps' that the user tracks
-      animationId: null,
-      // holds the ID for stopping the animation cycle
-      animationFrame: null,
-      // the animation from for the second timer
-      ctx: null // for canvas element
+      animationId: null // holds the ID for stopping the animation cycle
 
     };
   },
@@ -1850,7 +1838,7 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
       this.animationId = requestAnimationFrame(this.runClock);
     },
     timestamp: function timestamp() {
-      this.timestamps.push({
+      this.timestamps.unshift({
         time: this.elapsedTotal
       });
     },
@@ -1858,70 +1846,121 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
       this.previouslyElapsed = 0;
       this.timestamps = [];
       this.elapsedTotal = 0;
+      this.renderTime();
     },
     runClock: function runClock(count) {
       this.elapsedNow = new Date().getTime() - this.clockCycleStart;
       this.elapsedTotal = this.previouslyElapsed + this.elapsedNow;
-      console.log('elapsed Total: ', this.elapsedTotal);
+      this.renderTime(); // console.log( 'elapsed Total: ', this.elapsedTotal );
+
       this.animationId = requestAnimationFrame(this.runClock);
-    },
-    changeTime: function changeTime(val) {
-      this.totalTime += val * 60 * 60;
     },
     degToRad: function degToRad(degree) {
       var factor = Math.PI / 180;
       return degree * factor;
     },
     renderTime: function renderTime() {
+      // the main function to print the time to the canvas
       var canvas = document.getElementById('canvas');
-      var ctx = canvas.getContext('2d');
-      ctx.strokeStyle = '#00ffff';
-      ctx.lineWidth = 17;
-      ctx.shadowBlur = 15;
-      ctx.shadowColor = '#00ffff';
-      var now = new Date();
-      var today = now.toDateString();
-      var time = now.toLocaleTimeString();
-      var hrs = now.getHours();
-      var min = now.getMinutes();
-      var sec = now.getSeconds();
-      var mil = now.getMilliseconds();
-      var smoothsec = sec + mil / 1000;
-      var smoothmin = min + smoothsec / 60;
-      var gradient = ctx.createRadialGradient(250, 250, 5, 250, 250, 300);
+      var ctx = canvas.getContext('2d'); // let now   = new Date();
+      // let today = now.toDateString();
+      // let time  = now.toLocaleTimeString().substr( 0, 8 );
+      // let hrs   = now.getHours();
+      // let min   = now.getMinutes();
+      // let sec   = now.getSeconds();
+      // let mil   = now.getMilliseconds();
+      // let smoothsec = sec + ( mil / 1000 );
+
+      var smoothsec = this.timeElapsed.s + this.timeElapsed.ms / 1000;
+      var smoothmin = this.timeElapsed.m + this.timeElapsed.s / 60; // ctx.createRadialGradient()
+
+      var gradient = ctx.createRadialGradient(175, 175, 5, 250, 250, 200);
       gradient.addColorStop(0, '#03303a');
       gradient.addColorStop(1, 'black');
       ctx.fillStyle = gradient;
-      ctx.clearRect(0, 0, 500, 500);
-      ctx.fillRect(0, 0, 500, 500); // Hours
+      ctx.clearRect(0, 0, 350, 350);
+      ctx.fillRect(0, 0, 350, 350); // // Hours
+      // ctx.beginPath();
+      // ctx.arc( 250, 250, 200, this.degToRad( 270 ), this.degToRad( ( hrs * 30 ) - 90 ) );
+      // ctx.stroke();
 
-      ctx.beginPath();
-      ctx.arc(250, 250, 200, this.degToRad(270), this.degToRad(hrs * 30 - 90));
-      ctx.stroke(); // Minutes
+      if (this.timeElapsed.ms != 0 && (this.timeElapsed.m + 1) % 2) {
+        // on every even minute
+        ctx.strokeStyle = '#000000';
+        ctx.lineWidth = 17;
+        ctx.shadowBlur = 15;
+        ctx.shadowColor = '#00ffff'; // Minutes
 
-      ctx.beginPath();
-      ctx.arc(250, 250, 170, this.degToRad(270), this.degToRad(min * 6 - 90));
-      ctx.stroke(); // Seconds
+        ctx.beginPath();
+        ctx.arc(180, 180, 140, this.degToRad(270), this.degToRad(-90));
+        ctx.stroke();
+        ctx.strokeStyle = '#00ffff';
+        ctx.lineWidth = 17;
+        ctx.shadowBlur = 15;
+        ctx.shadowColor = '#00ffff'; // Seconds
 
-      ctx.beginPath();
-      ctx.arc(250, 250, 140, this.degToRad(270), this.degToRad(smoothsec * 6 - 90));
-      ctx.stroke(); // Date
+        ctx.beginPath();
+        ctx.arc(180, 180, 140, this.degToRad(270), this.degToRad(smoothsec * 6 - 90));
+        ctx.stroke();
+      } else {
+        // on every odd minute
+        ctx.strokeStyle = '#00ffff';
+        ctx.lineWidth = 17;
+        ctx.shadowBlur = 15;
+        ctx.shadowColor = '#00ffff'; // Minutes
 
-      ctx.font = "25px Helvetica";
-      ctx.fillStyle = 'rgba( 00, 255, 255, 1 )';
-      ctx.fillText(today, 175, 250); // Time
+        ctx.beginPath();
+        ctx.arc(180, 180, 140, this.degToRad(270), this.degToRad(-90));
+        ctx.stroke();
+        ctx.strokeStyle = '#000000';
+        ctx.lineWidth = 17;
+        ctx.shadowBlur = 15;
+        ctx.shadowColor = '#00ffff'; // Seconds
 
-      ctx.font = "25px Helvetica Bold";
-      ctx.fillStyle = 'rgba( 00, 255, 255, 1 )';
-      ctx.fillText(time + ":" + mil, 175, 280);
+        ctx.beginPath();
+        ctx.arc(180, 180, 140, this.degToRad(270), this.degToRad(smoothsec * 6 - 90));
+        ctx.stroke();
+      } // Minutes ( old reference )
+      // ctx.beginPath();
+      // ctx.arc( 250, 250, 170, this.degToRad( 270 ), this.degToRad( ( smoothmin * 6 ) - 90 ) );
+      // ctx.stroke();
+      // // Date
+      // ctx.font = "25px Helvetica";
+      // ctx.fillStyle = 'rgba( 00, 255, 255, 1 )';
+      // ctx.fillText( today, 175, 250 );
+      // Center Time Tracker
+
+
+      ctx.font = "24px Helvetica Bold";
+      ctx.fillStyle = 'rgba( 00, 255, 255, 1 )'; // ctx.fillText( time + " : " + mil, 175, 280 );
+
+      ctx.fillText(this.formatTime(this.elapsedTotal), 155, 150);
+
+      if (this.timestamps.length > 0) {
+        ctx.font = "16px Helvetica Bold";
+        ctx.fillStyle = 'rgba( 00, 225, 225, 0.8 )';
+        ctx.fillText(this.formatTime(this.elapsedTotal - this.timestamps[this.timestamps.length - 1].time), 165, 175);
+      }
+    },
+    formatTime: function formatTime(time) {
+      var ms = Math.floor(time % 1000);
+      var s = Math.floor(time / 1000) % 60;
+      var m = Math.floor(time / 60000) % 60;
+      return m + ':' + s + ':' + ms;
     }
   },
   computed: {
     timeElapsed: function timeElapsed() {
+      // might not need this... abstracted into the formateTime() function
+      // to use elsewhere..
       var ms = Math.floor(this.elapsedTotal % 1000);
       var s = Math.floor(this.elapsedTotal / 1000) % 60;
       var m = Math.floor(this.elapsedTotal / 60000) % 60;
-      return m + ':' + s + ':' + ms;
+      return {
+        ms: ms,
+        s: s,
+        m: m
+      };
     },
     timeRemaining: function timeRemaining() {
       return 'lmao okay';
@@ -1951,7 +1990,7 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
     }
   },
   mounted: function mounted() {
-    setInterval(this.renderTime, 40);
+    this.renderTime();
   }
 });
 
@@ -6414,7 +6453,7 @@ exports = module.exports = __webpack_require__(/*! ../../../node_modules/css-loa
 
 
 // module
-exports.push([module.i, "\n.time-wrap[data-v-1b6a14e0] {\n\n    text-align: center;\n    font-size: 35px;\n}\n.clock-wrapper[data-v-1b6a14e0] {\n\n    display: flex;\n    flex-direction: column;\n    align-items: center;\n}\n.inner-clock-wrap[data-v-1b6a14e0] {\n\n    display: flex;\n    justify-content: center;\n}\n.action-bar-wrapper[data-v-1b6a14e0] {\n\n    display: flex;\n    justify-content: space-between;\n    width: 100%;\n    max-width: 350px;\n    margin: auto;\n}\n.meta-data-wrapper[data-v-1b6a14e0] {\n\n    background-color: white;\n    padding: 25px;\n    display: flex;\n    justify-content: space-between;\n    box-shadow: 0px 2px 5px #ccc;\n}\n.interval-column[data-v-1b6a14e0] {\n\n    flex: 1;\n    flex-direction: column;\n}\n.timestamp-column[data-v-1b6a14e0] {\n\n    flex: 1;\n    flex-direction: column;\n}\n.interval-wrap[data-v-1b6a14e0] {\n\n    display: flex;\n    flex-direction: column;\n}\n.active-interval[data-v-1b6a14e0] {\n\n    border: 1px solid blue;\n}\n.interval-name[data-v-1b6a14e0],\n.interval-time[data-v-1b6a14e0],\n.input-wrap > input[data-v-1b6a14e0] {\n\n    margin: 0;\n    display: inline-block;\n    width: 50%;\n}\n", ""]);
+exports.push([module.i, "\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n/* the main container element */\n.time-wrap[data-v-1b6a14e0] {\n\n    display: flex;\n    flex-direction: column;\n\n    height: 100%;\n    padding-top: 55px;\n    text-align: center;\n    font-size: 35px;\n    width: 100%;\n    max-width: 350px;\n    margin: auto;\n}\n\n/* action bar, for the start/stop buttons */\n.action-bar-wrapper[data-v-1b6a14e0] {\n\n    display: flex;\n    justify-content: space-between;\n    width: 100%;\n    max-width: 250px;\n    margin: 45px auto 0px;\n}\n.action-bar-wrapper > button[data-v-1b6a14e0] {\n\n    font-size: 16px;\n    flex: 1;\n}\n.action-bar-wrapper > button[data-v-1b6a14e0]:focus {\n\n    outline: none;\n}\n.action-bar-wrapper > button[data-v-1b6a14e0]:first-child {\n\n    border-top-left-radius: 10px;\n    border-bottom-left-radius: 10px;\n}\n.action-bar-wrapper > button[data-v-1b6a14e0]:last-child {\n\n    border-top-right-radius: 10px;\n    border-bottom-right-radius: 10px;\n}\n\n/* styles for the time stamp columns */\n.timestamp-column[data-v-1b6a14e0] {\n\n    flex: 1;\n    flex-direction: column;\n    margin: 15px 0px;\n    max-height: 350px;\n    overflow-y: scroll;\n}\n.timestamp-entry[data-v-1b6a14e0] {\n\n    display: flex;\n    justify-content: space-between;\n    font-size: 16px;\n    margin: 5px;\n}\n.timestamp-entry > p[data-v-1b6a14e0] {\n\n    font-size: 16px;\n    margin: 0;\n    color: #aaa;\n}\n.timestamp-entry > p[data-v-1b6a14e0]:nth-child( 2 ) {\n\n    font-size: 24px;\n    color: #ccc;\n}\n.meta-data-wrapper[data-v-1b6a14e0] {\n\n    background-color: white;\n    padding: 25px;\n    display: flex;\n    justify-content: space-between;\n    box-shadow: 0px 2px 5px #ccc;\n}\n.interval-column[data-v-1b6a14e0] {\n\n    flex: 1;\n    flex-direction: column;\n}\n.interval-wrap[data-v-1b6a14e0] {\n\n    display: flex;\n    flex-direction: column;\n}\n.active-interval[data-v-1b6a14e0] {\n\n    border: 1px solid blue;\n}\n.interval-name[data-v-1b6a14e0],\n.interval-time[data-v-1b6a14e0],\n.input-wrap > input[data-v-1b6a14e0] {\n\n    margin: 0;\n    display: inline-block;\n    width: 50%;\n}\n", ""]);
 
 // exports
 
@@ -37938,18 +37977,74 @@ var render = function() {
   var _vm = this
   var _h = _vm.$createElement
   var _c = _vm._self._c || _h
-  return _vm._m(0)
+  return _c("div", { staticClass: "time-wrap" }, [
+    _c("div", { staticClass: "action-bar-wrapper" }, [
+      _c(
+        "button",
+        {
+          attrs: { type: "button" },
+          on: {
+            click: function($event) {
+              _vm.clockIsRunning ? _vm.stopCounting() : _vm.startCounting()
+            }
+          }
+        },
+        [_vm._v(_vm._s(_vm.clockIsRunning ? "Stop" : "Start"))]
+      ),
+      _vm._v(" "),
+      _c(
+        "button",
+        {
+          attrs: { type: "button" },
+          on: {
+            click: function($event) {
+              _vm.clockIsRunning ? _vm.timestamp() : _vm.resetCounter()
+            }
+          }
+        },
+        [_vm._v(_vm._s(_vm.clockIsRunning ? "Timestamp" : "Reset"))]
+      )
+    ]),
+    _vm._v(" "),
+    _c("canvas", { attrs: { id: "canvas", width: "350", height: "350" } }),
+    _vm._v(" "),
+    _c(
+      "div",
+      { staticClass: "timestamp-column" },
+      _vm._l(_vm.timestamps, function(timestamp, index) {
+        return _c("div", { key: index, staticClass: "timestamp-entry" }, [
+          _c("p", [
+            _vm._v(
+              _vm._s(
+                (_vm.timestamps.length - index).toLocaleString("en-US", {
+                  minimumIntegerDigits: 2,
+                  useGrouping: false
+                })
+              )
+            )
+          ]),
+          _vm._v(" "),
+          _c("p", [_vm._v(_vm._s(_vm.formatTime(timestamp.time)))]),
+          _vm._v(" "),
+          _c("p", [
+            _vm._v(
+              _vm._s(
+                _vm.formatTime(
+                  timestamp.time -
+                    (index == _vm.timestamps.length - 1
+                      ? 0
+                      : _vm.timestamps[index + 1].time)
+                )
+              ) + " "
+            )
+          ])
+        ])
+      }),
+      0
+    )
+  ])
 }
-var staticRenderFns = [
-  function() {
-    var _vm = this
-    var _h = _vm.$createElement
-    var _c = _vm._self._c || _h
-    return _c("div", { staticClass: "time-wrap" }, [
-      _c("canvas", { attrs: { id: "canvas", width: "500", height: "500" } })
-    ])
-  }
-]
+var staticRenderFns = []
 render._withStripped = true
 
 

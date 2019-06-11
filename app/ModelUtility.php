@@ -5,7 +5,6 @@ namespace App;
 class ModelUtility
 {
 
-
     /**
      * 
      * I probably did way too much here..

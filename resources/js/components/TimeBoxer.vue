@@ -2,26 +2,25 @@
 
     <div class="time-wrap">
 
-        <canvas id="canvas" width="500" height="500"></canvas>
-
-        <!-- <div class="direction-wrapper">
-
-            <button type="button" @click=" toggleDirection() ">{{ direction == 1 ? 'Counting Up' : 'Counting Down' }}</button>
-        </div>
-        <div class="clock-wrapper">
-
-            <div class="inner-clock-wrap">
-
-                <p>{{ timeElapsed + ' / ' + milestone }}</p>
-            </div>
-            <p>{{ timeRemaining }}</p>
-        </div>
         <div class="action-bar-wrapper">
 
             <button type="button" @click=" clockIsRunning ? stopCounting() : startCounting() ">{{ clockIsRunning ? 'Stop' : 'Start' }}</button>
             <button type="button" @click=" clockIsRunning ? timestamp() : resetCounter() ">{{ clockIsRunning ? 'Timestamp' : 'Reset' }}</button>
         </div>
-        <div class="meta-data-wrapper">
+
+        <canvas id="canvas" width="350" height="350"></canvas>
+
+        <div class="timestamp-column">
+
+            <div class="timestamp-entry" v-for=" ( timestamp, index ) in timestamps " :key=" index ">
+
+                <p>{{ ( timestamps.length - index ).toLocaleString( 'en-US', { minimumIntegerDigits: 2, useGrouping: false } ) }}</p>
+                <p>{{ formatTime( timestamp.time ) }}</p>
+                <p>{{ formatTime( timestamp.time - ( index == timestamps.length - 1 ? 0 : timestamps[ index + 1 ].time ) ) }} </p>
+            </div>
+        </div>
+
+        <!-- <div class="meta-data-wrapper">
 
             <div class="interval-column">
 
@@ -41,13 +40,6 @@
                         <input placeholder="seconds" type="text" v-model=" newInterval.time " />
                     </div>
                     <button class="" type="button" @click=" addInterval() ">Add</button>
-                </div>
-            </div>
-            <div class="timestamp-column">
-
-                <div v-for=" ( timestamp, index ) in timestamps " :key=" index ">
-
-                    {{ timestamp.time }}
                 </div>
             </div>
         </div> -->
@@ -75,10 +67,6 @@
             },
             timestamps        : [], // will hold any timestamps or 'laps' that the user tracks
             animationId       : null, // holds the ID for stopping the animation cycle
-
-
-            animationFrame : null, // the animation from for the second timer
-            ctx            : null // for canvas element
         }),
         methods: {
 
@@ -113,7 +101,7 @@
             },
             timestamp(){
 
-                this.timestamps.push({
+                this.timestamps.unshift({
 
                     time: this.elapsedTotal
                 });
@@ -123,17 +111,16 @@
                 this.previouslyElapsed = 0;
                 this.timestamps = [];
                 this.elapsedTotal = 0;
+                this.renderTime();
             },
             runClock( count ){
 
-                this.elapsedNow = new Date().getTime() - this.clockCycleStart;
+                this.elapsedNow   = new Date().getTime() - this.clockCycleStart;
                 this.elapsedTotal = this.previouslyElapsed + this.elapsedNow;
-                console.log( 'elapsed Total: ', this.elapsedTotal );
-                this.animationId = requestAnimationFrame( this.runClock );
-            },
-            changeTime( val ){
+                this.renderTime();
 
-                this.totalTime += ( val * 60 * 60 );
+                // console.log( 'elapsed Total: ', this.elapsedTotal );
+                this.animationId  = requestAnimationFrame( this.runClock );
             },
             degToRad( degree ){
 
@@ -141,68 +128,127 @@
                 return degree * factor;
             },
             renderTime(){
+                // the main function to print the time to the canvas
 
                 let canvas = document.getElementById( 'canvas' );
-                let ctx = canvas.getContext( '2d' );
+                let ctx    = canvas.getContext( '2d' );
 
-                ctx.strokeStyle = '#00ffff';
-                ctx.lineWidth = 17;
-                ctx.shadowBlur= 15;
-                ctx.shadowColor = '#00ffff';
+                // let now   = new Date();
+                // let today = now.toDateString();
+                // let time  = now.toLocaleTimeString().substr( 0, 8 );
+                // let hrs   = now.getHours();
+                // let min   = now.getMinutes();
+                // let sec   = now.getSeconds();
+                // let mil   = now.getMilliseconds();
 
-                let now = new Date();
-                let today = now.toDateString();
-                let time = now.toLocaleTimeString();
-                let hrs = now.getHours();
-                let min = now.getMinutes();
-                let sec = now.getSeconds();
-                let mil = now.getMilliseconds();
-
-                let smoothsec = sec + ( mil / 1000 );
-                let smoothmin = min + ( smoothsec / 60 );
-
-                let gradient = ctx.createRadialGradient( 250, 250, 5, 250, 250, 300 );
+                // let smoothsec = sec + ( mil / 1000 );
+                let smoothsec = this.timeElapsed.s + ( this.timeElapsed.ms / 1000 );
+                let smoothmin = this.timeElapsed.m + ( this.timeElapsed.s / 60 );
+                
+                // ctx.createRadialGradient()
+                let gradient = ctx.createRadialGradient( 175, 175, 5, 250, 250, 200 );
                 gradient.addColorStop( 0, '#03303a' );
                 gradient.addColorStop( 1, 'black' );
                 ctx.fillStyle = gradient;
-                ctx.clearRect( 0, 0, 500, 500 );
-                ctx.fillRect( 0, 0, 500, 500 );
+                ctx.clearRect( 0, 0, 350, 350 );
+                ctx.fillRect( 0, 0, 350, 350 );
 
-                // Hours
-                ctx.beginPath();
-                ctx.arc( 250, 250, 200, this.degToRad( 270 ), this.degToRad( ( hrs * 30 ) - 90 ) );
-                ctx.stroke();
+                // // Hours
+                // ctx.beginPath();
+                // ctx.arc( 250, 250, 200, this.degToRad( 270 ), this.degToRad( ( hrs * 30 ) - 90 ) );
+                // ctx.stroke();
 
-                // Minutes
-                ctx.beginPath();
-                ctx.arc( 250, 250, 170, this.degToRad( 270 ), this.degToRad( ( min * 6 ) - 90 ) );
-                ctx.stroke();
+                if( this.timeElapsed.ms != 0 && ( this.timeElapsed.m + 1 ) % 2 ){
+                    // on every even minute
 
-                // Seconds
-                ctx.beginPath();
-                ctx.arc( 250, 250, 140, this.degToRad( 270 ), this.degToRad( ( smoothsec * 6 ) - 90 ) );
-                ctx.stroke();
+                    ctx.strokeStyle = '#000000';
+                    ctx.lineWidth   = 17;
+                    ctx.shadowBlur  = 15;
+                    ctx.shadowColor = '#00ffff';
 
-                // Date
-                ctx.font = "25px Helvetica";
+                    // Minutes
+                    ctx.beginPath();
+                    ctx.arc( 180, 180, 140, this.degToRad( 270 ), this.degToRad( -90 ) );
+                    ctx.stroke();
+
+                    ctx.strokeStyle = '#00ffff';
+                    ctx.lineWidth   = 17;
+                    ctx.shadowBlur  = 15;
+                    ctx.shadowColor = '#00ffff';
+
+                    // Seconds
+                    ctx.beginPath();
+                    ctx.arc( 180, 180, 140, this.degToRad( 270 ), this.degToRad( ( smoothsec * 6 ) - 90 ) );
+                    ctx.stroke();
+                } else {
+                    // on every odd minute
+
+                    ctx.strokeStyle = '#00ffff';
+                    ctx.lineWidth   = 17;
+                    ctx.shadowBlur  = 15;
+                    ctx.shadowColor = '#00ffff';
+
+                    // Minutes
+                    ctx.beginPath();
+                    ctx.arc( 180, 180, 140, this.degToRad( 270 ), this.degToRad( -90 ) );
+                    ctx.stroke();
+
+                    ctx.strokeStyle = '#000000';
+                    ctx.lineWidth   = 17;
+                    ctx.shadowBlur  = 15;
+                    ctx.shadowColor = '#00ffff';
+
+                    // Seconds
+                    ctx.beginPath();
+                    ctx.arc( 180, 180, 140, this.degToRad( 270 ), this.degToRad( ( smoothsec * 6 ) - 90 ) );
+                    ctx.stroke();
+                }
+
+                // Minutes ( old reference )
+                // ctx.beginPath();
+                // ctx.arc( 250, 250, 170, this.degToRad( 270 ), this.degToRad( ( smoothmin * 6 ) - 90 ) );
+                // ctx.stroke();
+
+                // // Date
+                // ctx.font = "25px Helvetica";
+                // ctx.fillStyle = 'rgba( 00, 255, 255, 1 )';
+                // ctx.fillText( today, 175, 250 );
+
+                // Center Time Tracker
+                ctx.font = "24px Helvetica Bold";
                 ctx.fillStyle = 'rgba( 00, 255, 255, 1 )';
-                ctx.fillText( today, 175, 250 );
+                // ctx.fillText( time + " : " + mil, 175, 280 );
+                ctx.fillText( this.formatTime( this.elapsedTotal ), 155, 150 );
+                if( this.timestamps.length > 0 ) {
 
-                // Time
-                ctx.font = "25px Helvetica Bold";
-                ctx.fillStyle = 'rgba( 00, 255, 255, 1 )';
-                ctx.fillText( time + ":" + mil, 175, 280 );
+                    ctx.font = "16px Helvetica Bold";
+                    ctx.fillStyle = 'rgba( 00, 225, 225, 0.8 )';
+                    ctx.fillText( this.formatTime( this.elapsedTotal - this.timestamps[ this.timestamps.length - 1 ].time ), 165, 175 );
+                }
+            },
+            formatTime( time ){
 
+                let ms = Math.floor( time % 1000 );
+                let s = Math.floor( ( time / 1000 ) ) % 60;
+                let m = Math.floor( ( time / 60000 ) ) % 60;
+                return m + ':' + s + ':' + ms;
             }
         },
         computed: {
 
             timeElapsed(){
+                // might not need this... abstracted into the formateTime() function
+                // to use elsewhere..
 
                 let ms = Math.floor( this.elapsedTotal % 1000 );
                 let s = Math.floor( ( this.elapsedTotal / 1000 ) ) % 60;
                 let m = Math.floor( ( this.elapsedTotal / 60000 ) ) % 60;
-                return m + ':' + s + ':' + ms;
+                return {
+
+                    ms,
+                    s,
+                    m
+                }
             },
             timeRemaining(){
 
@@ -235,40 +281,90 @@
         },
         mounted(){
 
-            setInterval( this.renderTime, 40 );
+            this.renderTime();
         }
     }
 </script>
 
 <style scoped>
 
+    /* the main container element */
     .time-wrap {
-
-        text-align: center;
-        font-size: 35px;
-    }
-
-    .clock-wrapper {
 
         display: flex;
         flex-direction: column;
-        align-items: center;
+
+        height: 100%;
+        padding-top: 55px;
+        text-align: center;
+        font-size: 35px;
+        width: 100%;
+        max-width: 350px;
+        margin: auto;
     }
 
-    .inner-clock-wrap {
-
-        display: flex;
-        justify-content: center;
-    }
-
+    /* action bar, for the start/stop buttons */
     .action-bar-wrapper {
 
         display: flex;
         justify-content: space-between;
         width: 100%;
-        max-width: 350px;
-        margin: auto;
+        max-width: 250px;
+        margin: 45px auto 0px;
     }
+    .action-bar-wrapper > button {
+
+        font-size: 16px;
+        flex: 1;
+    }
+    .action-bar-wrapper > button:focus {
+
+        outline: none;
+    }
+    .action-bar-wrapper > button:first-child {
+
+        border-top-left-radius: 10px;
+        border-bottom-left-radius: 10px;
+    }
+    .action-bar-wrapper > button:last-child {
+
+        border-top-right-radius: 10px;
+        border-bottom-right-radius: 10px;
+    }
+
+    /* styles for the time stamp columns */
+    .timestamp-column {
+
+        flex: 1;
+        flex-direction: column;
+        margin: 15px 0px;
+        max-height: 350px;
+        overflow-y: scroll;
+    }
+
+    .timestamp-entry {
+
+        display: flex;
+        justify-content: space-between;
+        font-size: 16px;
+        margin: 5px;
+    }
+
+    .timestamp-entry > p {
+
+        font-size: 16px;
+        margin: 0;
+        color: #aaa;
+    }
+
+    .timestamp-entry > p:nth-child( 2 ) {
+
+        font-size: 24px;
+        color: #ccc;
+    }
+
+
+
 
     .meta-data-wrapper {
 
@@ -280,12 +376,6 @@
     }
 
     .interval-column {
-
-        flex: 1;
-        flex-direction: column;
-    }
-
-    .timestamp-column {
 
         flex: 1;
         flex-direction: column;

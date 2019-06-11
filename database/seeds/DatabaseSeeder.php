@@ -13,9 +13,9 @@ class DatabaseSeeder extends Seeder
     {
         $this->call([
 
-            UsersTableSeeder::class,
-            TasksTableSeeder::class,
-            RoutinesTableSeeder::class
+            UsersTableSeeder::class, // actually only ended up needing this one.. for now..
+            // TasksTableSeeder::class,
+            // RoutinesTableSeeder::class
         ]);
     }
 }

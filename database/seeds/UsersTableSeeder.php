@@ -15,10 +15,38 @@ class UsersTableSeeder extends Seeder
     public function run()
     {
 
-        factory( User::class, 35 )->create()->each( function( $user ){
+        factory( User::class, 5 )->create()->each( function( $user ){
 
-            // $user->tasks()->save( factory( Task::class, 45   )->make() );
-            // $user->tasks()->save( factory( Routine::class, 3 )->make() );
+            $user->tasks()->saveMany( factory( Task::class, 25 )->make([
+
+                'user_id' => $user->id // must still explicitly override this
+            ]));
+            $user->tasks()->saveMany( factory( Routine::class, 4 )->make([
+
+                'user_id' => $user->id
+            ]));
         });
+
+        // Attach a random assortment of Tasks and Routines to eachother, for each user
+        $users = App\User::all();
+        foreach( $users as $user ){
+            // take each user..
+
+            // get the id's of all their tasks..
+            $tasks = $user->tasks()->get( 'id' )->toArray();
+
+            // get all their routines..
+            $routines = $user->routines;
+            foreach( $routines as $routine ){
+                // and for each routine..
+
+                for( $i = 0; $i < 3; $i++ ){
+                    // attach 3 tasks.. making sure that there's no overlap with 'pop'
+
+                    $taskId = array_pop( $tasks )[ 'id' ];
+                    $routine->tasks()->attach( $taskId );
+                }
+            }
+        }
     }
 }

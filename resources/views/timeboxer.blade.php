@@ -9,7 +9,7 @@
 
             <div class="row h-100 align-items-center">
 
-                <div class="col-12 text-center">
+                <div class="col-12 text-center h-100">
 
                     <time-boxer></time-boxer>
                 </div>
@@ -24,7 +24,7 @@
 
         body {
 
-            background-color: black;
+            background-color: #000;
         }
     </style>
 @endsection
