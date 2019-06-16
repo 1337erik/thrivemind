@@ -15,7 +15,14 @@ class UsersTableSeeder extends Seeder
     public function run()
     {
 
-        factory( User::class, 5 )->create()->each( function( $user ){
+        factory( User::class, 5 )->create()->each( function( $user, $index ){
+
+            if( $index == 0 ){
+
+                $user->name = 'Erik White';
+                $user->email = 'erik@aol.com';
+                $user->save();
+            }
 
             $user->tasks()->saveMany( factory( Task::class, 25 )->make([
 

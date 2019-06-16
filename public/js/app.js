@@ -1939,7 +1939,7 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
       if (this.timestamps.length > 0) {
         ctx.font = "16px Helvetica Bold";
         ctx.fillStyle = 'rgba( 00, 225, 225, 0.8 )';
-        ctx.fillText(this.formatTime(this.elapsedTotal - this.timestamps[this.timestamps.length - 1].time), 165, 175);
+        ctx.fillText(this.formatTime(this.elapsedTotal - this.timestamps[0].time), 165, 175);
       }
     },
     formatTime: function formatTime(time) {
@@ -50494,8 +50494,8 @@ __webpack_require__.r(__webpack_exports__);
 /*! no static exports found */
 /***/ (function(module, exports, __webpack_require__) {
 
-__webpack_require__(/*! /Users/macuser/Desktop/projects/that-are-mine/timeboxer/resources/js/app.js */"./resources/js/app.js");
-module.exports = __webpack_require__(/*! /Users/macuser/Desktop/projects/that-are-mine/timeboxer/resources/sass/app.scss */"./resources/sass/app.scss");
+__webpack_require__(/*! /Users/macuser/Desktop/projects/that-are-mine/thrivemind/resources/js/app.js */"./resources/js/app.js");
+module.exports = __webpack_require__(/*! /Users/macuser/Desktop/projects/that-are-mine/thrivemind/resources/sass/app.scss */"./resources/sass/app.scss");
 
 
 /***/ })

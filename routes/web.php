@@ -11,16 +11,20 @@
 |
 */
 
-Route::get( '/', function () {
-
-    return view( 'welcome' );
-});
+Route::get( '/', 'HomeController@index' )->name( 'home' );
 
 Auth::routes();
-
-Route::get( '/home', 'HomeController@index' )->name( 'home' );
 
 Route::get( '/timeboxer', function(){
 
     return view( 'timeboxer' );
 })->name( 'timeboxer' );
+
+Route::middleware([ 'auth' ])->group( function(){
+
+    Route::get( '/dashboard', 'AppController@index' )->name( 'app.dashboard' );
+    Route::get( '/home', 'AppController@index' )->name( 'app.home' );
+
+    Route::resource( 'routines', 'RoutineController' );
+    Route::resource( 'tasks', 'TaskController' );
+});

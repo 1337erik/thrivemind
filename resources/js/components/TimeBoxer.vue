@@ -223,7 +223,7 @@
 
                     ctx.font = "16px Helvetica Bold";
                     ctx.fillStyle = 'rgba( 00, 225, 225, 0.8 )';
-                    ctx.fillText( this.formatTime( this.elapsedTotal - this.timestamps[ this.timestamps.length - 1 ].time ), 165, 175 );
+                    ctx.fillText( this.formatTime( this.elapsedTotal - this.timestamps[ 0 ].time ), 165, 175 );
                 }
             },
             formatTime( time ){
