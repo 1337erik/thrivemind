@@ -15,10 +15,7 @@ Route::get( '/', 'HomeController@index' )->name( 'home' );
 
 Auth::routes();
 
-Route::get( '/timeboxer', function(){
-
-    return view( 'timeboxer' );
-})->name( 'timeboxer' );
+Route::get( '/timeboxer', 'AppController@timeboxer' )->name( 'timeboxer' );
 
 Route::middleware([ 'auth' ])->group( function(){
 

@@ -11538,7 +11538,7 @@ input:focus {
 
 .main-panel .content {
   padding: 30px 15px;
-  min-height: calc(100vh - 123px);
+  min-height: calc(100vh - 125px);
 }
 
 .main-panel .footer {
@@ -23872,20 +23872,5 @@ select.selectpicker {
 .slider-danger .noUi-connect,
 .slider-danger.noUi-connect {
   background-color: #FB404B;
-}
-
-#app,
-.bigbody {
-  height: 100vh;
-  min-height: 500px;
-}
-
-.masthead {
-  height: 100vh;
-  min-height: 500px;
-  background: linear-gradient(0deg, rgba(0, 0, 0, 0.2), rgba(0, 0, 0, 0.2)), url("/images/backgroundimg.jpg");
-  background-size: cover;
-  background-position: center;
-  background-repeat: no-repeat;
 }
 

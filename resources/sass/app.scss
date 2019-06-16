@@ -9,19 +9,3 @@
 
 // Creative Tim Pro Dashboard
 @import 'light-bootstrap-dashboard';
-
-#app, .bigbody {
-
-    height: 100vh;
-    min-height: 500px;
-}
-
-.masthead {
-
-    height: 100vh;
-    min-height: 500px;
-    background: linear-gradient( 0deg, rgba(0, 0, 0, 0.2), rgba(0, 0, 0, 0.2) ), url( '/images/backgroundimg.jpg' );
-    background-size: cover;
-    background-position: center;
-    background-repeat: no-repeat;
-}

@@ -34,7 +34,7 @@
             </ul> --}}
             <ul class="navbar-nav">
 
-                <li class="dropdown nav-item">
+                {{-- <li class="dropdown nav-item">
 
                     <a href="#" class="dropdown-toggle nav-link" data-toggle="dropdown">
 
@@ -49,8 +49,9 @@
                         <li class="divider"></li>
                         <a class="dropdown-item" href="#">Another action</a>
                     </ul>
-                </li>
-                <li class="dropdown nav-item">
+                </li> --}}
+
+                {{-- <li class="dropdown nav-item">
 
                     <a href="#" class="dropdown-toggle nav-link" data-toggle="dropdown">
 
@@ -66,7 +67,8 @@
                         <a class="dropdown-item" href="#">Notification 4</a>
                         <a class="dropdown-item" href="#">Notification 5</a>
                     </ul>
-                </li>
+                </li> --}}
+
                 <li class="nav-item dropdown">
 
                     <a class="nav-link dropdown-toggle" href="http://example.com" id="navbarDropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
@@ -74,7 +76,17 @@
                     </a>
                     <div class="dropdown-menu dropdown-menu-right" aria-labelledby="navbarDropdownMenuLink">
 
-                        <a class="dropdown-item" href="#">
+                        <a class="dropdown-item" href="{{ route( 'logout' ) }}"
+                            onclick="event.preventDefault();
+                                            document.getElementById( 'logout-form' ).submit();">
+                            <i class="fas fa-sign-out-alt"></i>
+                            {{ __( 'Sign Out' ) }}
+                        </a>
+
+                        <form id="logout-form" action="{{ route('logout') }}" method="POST" style="display: none;">
+                            @csrf
+                        </form>
+                        {{-- <a class="dropdown-item" href="#">
 
                             <i class="nc-icon nc-email-85"></i> Messages
                         </a>
@@ -95,7 +107,7 @@
                         <a href="#" class="dropdown-item text-danger">
 
                             <i class="nc-icon nc-button-power"></i> Log out
-                        </a>
+                        </a> --}}
                     </div>
                 </li>
             </ul>

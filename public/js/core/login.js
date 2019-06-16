@@ -1,4 +1,5 @@
 $().ready(function() {
+
     demo.checkFullPageBackgroundImage();
 
     setTimeout(function() {
@@ -9,7 +10,7 @@ $().ready(function() {
 
     demo.initDashboardPageCharts();
 
-    demo.showNotification();
+    // demo.showNotification();
 
     demo.initVectorMap();
 });

@@ -85,11 +85,44 @@
 
     <!-- Styles -->
     <link href="{{ asset( 'css/app.css' ) }}" rel="stylesheet">
-
-    @yield( 'extraCss' )
 </head>
 <body>
 
-    @yield( 'content' )
+    @auth
+
+        <div id="app" class="wrapper">
+
+            @include( 'app.components.sidenav' )
+    
+            <div class="main-panel">
+    
+                @include( 'app.components.appnavbar' )
+    
+                <div class="content">
+    
+                    <div class="container-fluid">
+    
+                        @yield( 'content' )
+                    </div>
+                </div>
+    
+                @include( 'app.components.footer' )
+            </div>
+        </div>
+    @else
+
+        <div id="app" class="wrapper wrapper-full-page">
+
+            @include( 'app.components.topnav' )
+
+            <div class="full-page section-image" data-color="azure" data-image="{{ url( '/img/app/full-screen-image-3.jpg' ) }}" >
+
+                <div class="content">
+
+                    @yield( 'content' )
+                </div>
+            </div>
+        </div>
+    @endauth
 </body>
 </html>

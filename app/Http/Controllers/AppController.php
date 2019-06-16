@@ -27,4 +27,17 @@ class AppController extends Controller
 
         return view( 'app.pages.dashboard' );
     }
+
+    /**
+     * Show the timeboxer subapp
+     * 
+     * should probably offload onto a vbue component and not make this a MPA
+     *
+     * @return \Illuminate\Contracts\Support\Renderable
+     */
+    public function timeboxer()
+    {
+
+        return view( 'app.pages.timeboxer' );
+    }
 }
