@@ -3264,9 +3264,9 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
       var smoothsec = this.timeElapsed.s + this.timeElapsed.ms / 1000;
       var smoothmin = this.timeElapsed.m + this.timeElapsed.s / 60; // ctx.createRadialGradient()
 
-      var gradient = ctx.createRadialGradient(175, 175, 5, 250, 250, 200);
-      gradient.addColorStop(0, '#03303a');
-      gradient.addColorStop(1, 'black');
+      var gradient = ctx.createRadialGradient(175, 175, 5, 250, 250, 200); // gradient.addColorStop( 0, '#03303a' );
+
+      gradient.addColorStop(1, '#fafafa');
       ctx.fillStyle = gradient;
       ctx.clearRect(0, 0, 350, 350);
       ctx.fillRect(0, 0, 350, 350); // // Hours
@@ -3322,13 +3322,13 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
 
 
       ctx.font = "24px Helvetica Bold";
-      ctx.fillStyle = 'rgba( 00, 255, 255, 1 )'; // ctx.fillText( time + " : " + mil, 175, 280 );
+      ctx.fillStyle = 'rgba( 00, 00, 255, 1 )'; // ctx.fillText( time + " : " + mil, 175, 280 );
 
       ctx.fillText(this.formatTime(this.elapsedTotal), 155, 150);
 
       if (this.timestamps.length > 0) {
         ctx.font = "16px Helvetica Bold";
-        ctx.fillStyle = 'rgba( 00, 225, 225, 0.8 )';
+        ctx.fillStyle = 'rgba( 00, 00, 225, 1 )';
         ctx.fillText(this.formatTime(this.elapsedTotal - this.timestamps[0].time), 165, 175);
       }
     },
@@ -6717,7 +6717,7 @@ exports = module.exports = __webpack_require__(/*! ../../../../node_modules/css-
 
 
 // module
-exports.push([module.i, "\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n/* the main container element */\n.time-wrap[data-v-0771a2f4] {\n\n    display: flex;\n    flex-direction: column;\n\n    height: 100%;\n    padding-top: 55px;\n    text-align: center;\n    font-size: 35px;\n    width: 100%;\n    max-width: 350px;\n    margin: auto;\n}\n\n/* action bar, for the start/stop buttons */\n.action-bar-wrapper[data-v-0771a2f4] {\n\n    display: flex;\n    justify-content: space-between;\n    width: 100%;\n    max-width: 250px;\n    margin: 45px auto 0px;\n}\n.action-bar-wrapper > button[data-v-0771a2f4] {\n\n    font-size: 16px;\n    flex: 1;\n}\n.action-bar-wrapper > button[data-v-0771a2f4]:focus {\n\n    outline: none;\n}\n.action-bar-wrapper > button[data-v-0771a2f4]:first-child {\n\n    border-top-left-radius: 10px;\n    border-bottom-left-radius: 10px;\n}\n.action-bar-wrapper > button[data-v-0771a2f4]:last-child {\n\n    border-top-right-radius: 10px;\n    border-bottom-right-radius: 10px;\n}\n\n/* styles for the time stamp columns */\n.timestamp-column[data-v-0771a2f4] {\n\n    flex: 1;\n    flex-direction: column;\n    margin: 15px 0px;\n    max-height: 350px;\n    overflow-y: scroll;\n}\n.timestamp-entry[data-v-0771a2f4] {\n\n    display: flex;\n    justify-content: space-between;\n    font-size: 16px;\n    margin: 5px;\n}\n.timestamp-entry > p[data-v-0771a2f4] {\n\n    font-size: 16px;\n    margin: 0;\n    color: #aaa;\n}\n.timestamp-entry > p[data-v-0771a2f4]:nth-child( 2 ) {\n\n    font-size: 24px;\n    color: #ccc;\n}\n.meta-data-wrapper[data-v-0771a2f4] {\n\n    background-color: white;\n    padding: 25px;\n    display: flex;\n    justify-content: space-between;\n    box-shadow: 0px 2px 5px #ccc;\n}\n.interval-column[data-v-0771a2f4] {\n\n    flex: 1;\n    flex-direction: column;\n}\n.interval-wrap[data-v-0771a2f4] {\n\n    display: flex;\n    flex-direction: column;\n}\n.active-interval[data-v-0771a2f4] {\n\n    border: 1px solid blue;\n}\n.interval-name[data-v-0771a2f4],\n.interval-time[data-v-0771a2f4],\n.input-wrap > input[data-v-0771a2f4] {\n\n    margin: 0;\n    display: inline-block;\n    width: 50%;\n}\n", ""]);
+exports.push([module.i, "\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n/* the main container element */\n.time-wrap[data-v-0771a2f4] {\n\n    display: flex;\n    flex-direction: column;\n\n    height: 100%;\n    padding-top: 55px;\n    text-align: center;\n    font-size: 35px;\n    width: 100%;\n    max-width: 350px;\n    margin: auto;\n}\n\n/* action bar, for the start/stop buttons */\n.action-bar-wrapper[data-v-0771a2f4] {\n\n    display: flex;\n    justify-content: space-between;\n    width: 100%;\n    max-width: 250px;\n    margin: 45px auto 0px;\n}\n.action-bar-wrapper > button[data-v-0771a2f4] {\n\n    font-size: 16px;\n    flex: 1;\n}\n.action-bar-wrapper > button[data-v-0771a2f4]:focus {\n\n    outline: none;\n}\n.action-bar-wrapper > button[data-v-0771a2f4]:first-child {\n\n    border-top-left-radius: 10px;\n    border-bottom-left-radius: 10px;\n}\n.action-bar-wrapper > button[data-v-0771a2f4]:last-child {\n\n    border-top-right-radius: 10px;\n    border-bottom-right-radius: 10px;\n}\n\n/* styles for the time stamp columns */\n.timestamp-column[data-v-0771a2f4] {\n\n    flex: 1;\n    flex-direction: column;\n    margin: 15px 0px;\n    max-height: 350px;\n    overflow-y: scroll;\n}\n.timestamp-entry[data-v-0771a2f4] {\n\n    display: flex;\n    justify-content: space-between;\n    font-size: 16px;\n    margin: 5px;\n}\n.timestamp-entry > p[data-v-0771a2f4] {\n\n    font-size: 16px;\n    margin: 0;\n    color: #0000ff;\n}\n.timestamp-entry > p[data-v-0771a2f4]:nth-child( 2 ) {\n\n    font-size: 24px;\n    color: #0000ff;\n}\n.meta-data-wrapper[data-v-0771a2f4] {\n\n    background-color: white;\n    padding: 25px;\n    display: flex;\n    justify-content: space-between;\n    box-shadow: 0px 2px 5px #ccc;\n}\n.interval-column[data-v-0771a2f4] {\n\n    flex: 1;\n    flex-direction: column;\n}\n.interval-wrap[data-v-0771a2f4] {\n\n    display: flex;\n    flex-direction: column;\n}\n.active-interval[data-v-0771a2f4] {\n\n    border: 1px solid blue;\n}\n.interval-name[data-v-0771a2f4],\n.interval-time[data-v-0771a2f4],\n.input-wrap > input[data-v-0771a2f4] {\n\n    margin: 0;\n    display: inline-block;\n    width: 50%;\n}\n", ""]);
 
 // exports
 

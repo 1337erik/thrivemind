@@ -109,8 +109,8 @@
             resetCounter(){
 
                 this.previouslyElapsed = 0;
-                this.timestamps = [];
-                this.elapsedTotal = 0;
+                this.timestamps        = [];
+                this.elapsedTotal      = 0;
                 this.renderTime();
             },
             runClock( count ){
@@ -120,7 +120,7 @@
                 this.renderTime();
 
                 // console.log( 'elapsed Total: ', this.elapsedTotal );
-                this.animationId  = requestAnimationFrame( this.runClock );
+                this.animationId = requestAnimationFrame( this.runClock );
             },
             degToRad( degree ){
 
@@ -147,8 +147,8 @@
                 
                 // ctx.createRadialGradient()
                 let gradient = ctx.createRadialGradient( 175, 175, 5, 250, 250, 200 );
-                gradient.addColorStop( 0, '#03303a' );
-                gradient.addColorStop( 1, 'black' );
+                // gradient.addColorStop( 0, '#03303a' );
+                gradient.addColorStop( 1, '#fafafa' );
                 ctx.fillStyle = gradient;
                 ctx.clearRect( 0, 0, 350, 350 );
                 ctx.fillRect( 0, 0, 350, 350 );
@@ -216,13 +216,13 @@
 
                 // Center Time Tracker
                 ctx.font = "24px Helvetica Bold";
-                ctx.fillStyle = 'rgba( 00, 255, 255, 1 )';
+                ctx.fillStyle = 'rgba( 00, 00, 255, 1 )';
                 // ctx.fillText( time + " : " + mil, 175, 280 );
                 ctx.fillText( this.formatTime( this.elapsedTotal ), 155, 150 );
                 if( this.timestamps.length > 0 ) {
 
                     ctx.font = "16px Helvetica Bold";
-                    ctx.fillStyle = 'rgba( 00, 225, 225, 0.8 )';
+                    ctx.fillStyle = 'rgba( 00, 00, 225, 1 )';
                     ctx.fillText( this.formatTime( this.elapsedTotal - this.timestamps[ 0 ].time ), 165, 175 );
                 }
             },
@@ -354,13 +354,13 @@
 
         font-size: 16px;
         margin: 0;
-        color: #aaa;
+        color: #0000ff;
     }
 
     .timestamp-entry > p:nth-child( 2 ) {
 
         font-size: 24px;
-        color: #ccc;
+        color: #0000ff;
     }
 
 
