@@ -3352,7 +3352,7 @@ __webpack_require__.r(__webpack_exports__);
     })["catch"](function (err) {
       return console.log(err);
     });
-    window.Echo.channel('activity-log').listen('ActivityRecorded', function (e) {
+    window.Echo["private"]('activity-log.' + window.user.id).listen('ActivityRecorded', function (e) {
       _this.activitylog.unshift(e.activity);
 
       console.log('new activity has been logged: ', e);

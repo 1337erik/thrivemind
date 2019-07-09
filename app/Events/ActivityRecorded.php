@@ -15,6 +15,7 @@ class ActivityRecorded implements ShouldBroadcast
     use Dispatchable, InteractsWithSockets, SerializesModels;
 
     public $activity;
+    public $user_channel;
 
     /**
      * Create a new event instance.
@@ -23,6 +24,7 @@ class ActivityRecorded implements ShouldBroadcast
      */
     public function __construct( $activity )
     {
+        $this->user_channel = $activity->user_id;
         $this->activity = $activity;
     }
 
@@ -33,6 +35,6 @@ class ActivityRecorded implements ShouldBroadcast
      */
     public function broadcastOn()
     {
-        return new Channel( 'activity-log' );
+        return new PrivateChannel( 'activity-log.' . $this->user_channel );
     }
 }

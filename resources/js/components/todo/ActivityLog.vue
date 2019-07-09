@@ -40,7 +40,7 @@
             })
             .catch( err => console.log( err ) );
 
-            window.Echo.channel( 'activity-log' )
+            window.Echo.private( 'activity-log.' + window.user.id )
             .listen( 'ActivityRecorded', e => {
 
                 this.activitylog.unshift( e.activity );
