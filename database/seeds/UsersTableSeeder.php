@@ -4,6 +4,7 @@ use Illuminate\Database\Seeder;
 use App\User;
 use App\Task;
 use App\Routine;
+use Illuminate\Support\Facades\Hash;
 
 class UsersTableSeeder extends Seeder
 {
@@ -21,6 +22,8 @@ class UsersTableSeeder extends Seeder
 
                 $user->name = 'Erik White';
                 $user->email = 'erik@aol.com';
+                $user->role = 'admin';
+                $user->password = Hash::make( 'asdf1234' );
                 $user->save();
             }
 

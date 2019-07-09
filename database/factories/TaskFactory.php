@@ -6,7 +6,7 @@ use App\Task;
 use Faker\Generator as Faker;
 
 use Facades\App\ModelUtility;
-
+use Carbon\Carbon;
 
 $factory->define( Task::class, function ( Faker $faker ) {
 
@@ -19,6 +19,8 @@ $factory->define( Task::class, function ( Faker $faker ) {
         'user_id'     => factory( \App\User::class ),
 
         'repetition'  => implode( '', ModelUtility::acceptedRepetitions( 1 ) ),
-        'duration'    => $faker->randomNumber( 5 )
+        'duration'    => $faker->randomNumber( 5 ),
+
+        'due_date'    => Carbon::parse( $faker->dateTimeBetween( '-15 days', '+15 days', 'EST' ) )
     ];
 });

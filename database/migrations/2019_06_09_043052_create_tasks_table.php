@@ -18,9 +18,10 @@ class CreateTasksTable extends Migration
             $table->bigIncrements( 'id' );
 
             $table->string( 'title' );
-            $table->string( 'description' );
+            $table->string( 'description' )->nullable();
+            $table->text( 'notes' )->nullable();
 
-            $table->text( 'notes' ); // putting this here out of compulsion.. not really sure what this is going to used for right now..
+            $table->boolean( 'completed' )->default( false );
 
             $table->unsignedBigInteger( 'user_id' );
                 $table->foreign( 'user_id' )->references( 'id' )->on( 'users' )->onDelete( 'cascade' );
@@ -28,6 +29,9 @@ class CreateTasksTable extends Migration
             $table->string( 'repetition' )->nullable();
             $table->integer( 'duration' )->nullable();
 
+            $table->dateTime( 'due_date' );
+
+            $table->softDeletes();
             $table->timestamps();
         });
     }

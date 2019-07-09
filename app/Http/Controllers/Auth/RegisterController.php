@@ -56,17 +56,29 @@ class RegisterController extends Controller
     }
 
     /**
+     * Show the application registration form.
+     *
+     * @return \Illuminate\Http\Response
+     */
+    public function showRegistrationForm()
+    {
+
+        return redirect( '/home/register' );
+    }
+
+    /**
      * Create a new user instance after a valid registration.
      *
      * @param  array  $data
      * @return \App\User
      */
-    protected function create(array $data)
+    protected function create( array $data )
     {
         return User::create([
-            'name' => $data['name'],
-            'email' => $data['email'],
-            'password' => Hash::make($data['password']),
+
+            'name'     => $data[ 'name'  ],
+            'email'    => $data[ 'email' ],
+            'password' => Hash::make( $data[ 'password' ] ),
         ]);
     }
 }

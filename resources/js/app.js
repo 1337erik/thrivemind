@@ -1,12 +1,12 @@
-/**
- * First we will load all of this project's JavaScript dependencies which
- * includes Vue and other libraries. It is a great starting point when
- * building robust, powerful web applications using Vue and Laravel.
- */
+let userHeader = document.head.querySelector( 'meta[name="user"]' );
+window.user    = null;
+if ( userHeader ) {
 
-require( './bootstrap' );
+    if ( userHeader.content ) {
 
-window.Vue = require( 'vue' );
+        window.user = JSON.parse( userHeader.content );
+    }
+}
 
 /**
  * The following block of code may be used to automatically register your
@@ -21,13 +21,175 @@ files.keys().map( key => Vue.component( key.split( '/' ).pop().split( '.' )[ 0 ]
 
 // Vue.component( 'example-component', require( './components/ExampleComponent.vue' ).default );
 
+
+import Vue from 'vue';
+
+import axios from 'axios';
+window.axios = axios;
+window.axios.defaults.headers.common['X-Requested-With'] = 'XMLHttpRequest';
+
+let token = document.head.querySelector( 'meta[name="csrf-token"]' );
+if ( token ) window.axios.defaults.headers.common[ 'X-CSRF-TOKEN' ] = token.content;
+else console.error( 'CSRF token not found: https://laravel.com/docs/csrf#csrf-x-csrf-token' );
+
+import VueRouter from 'vue-router';
+import routes from './router/router';
+Vue.use( VueRouter );
+
+
+import Vuex from 'vuex';
+import { store } from './vuex/index';
+Vue.use( Vuex );
+
+import colors from 'vuetify/es5/util/colors';
+import 'material-design-icons-iconfont/dist/material-design-icons.css';
+import '@fortawesome/fontawesome-free/css/all.css';
+
+import Vuetify from 'vuetify';
+Vue.use( Vuetify, {
+
+    theme : { // just going to put this here for when i'm ready to theme
+
+        ...colors,
+        primary   : '#1976D2',
+        secondary : '#424242',
+        accent    : '#82B1FF',
+        error     : '#FF5252',
+        info      : '#2196F3',
+        success   : '#4CAF50',
+        warning   : '#FFC107'
+    },
+    iconfont: 'md', // 'md' || 'mdi' || 'fa' || 'fa4'
+});
+
+
+// should be based on environment
+Vue.config.productionTip = false;
+
+
 /**
- * Next, we will create a fresh Vue application instance and attach it to
- * the page. Then, you may begin adding components to this application
- * or customize the JavaScript scaffolding to fit your unique needs.
+ * Echo exposes an expressive API for subscribing to channels and listening
+ * for events that are broadcast by Laravel. Echo and event broadcasting
+ * allows your team to easily build robust real-time web applications.
  */
 
-const app = new Vue({
+import Echo from 'laravel-echo';
+
+// window.Pusher = require('pusher-js');
+window.io = require( 'socket.io-client' );
+
+window.Echo = new Echo({
+
+    broadcaster : 'socket.io',
+    host        : window.location.hostname + ':6001'
+
+    // broadcaster: 'pusher',
+    // key: process.env.MIX_PUSHER_APP_KEY,
+    // cluster: process.env.MIX_PUSHER_APP_CLUSTER,
+    // encrypted: true
+});
+
+
+import withSnackbar from './components/mixins/withSnackbar';
+import { mapGetters, mapActions } from 'vuex';
+
+let app = new Vue({
 
     el: '#app',
+
+    store : new Vuex.Store( store ),
+    router: new VueRouter( routes ),
+
+    mixins: [ withSnackbar ],
+
+    props: {
+
+    },
+    data: () => ({
+
+        drawerLeft       : true,
+
+        logoutLoading    : false,
+        editingUser      : false,
+        updatingUser     : false,
+        changingPassword : false,
+        routes           : routes.routes
+    }),
+    methods: {
+
+        toggleLeftDrawer() {
+
+            this.drawerLeft = !this.drawerLeft;
+        },
+        updateEmail( email ){
+
+            this.$store.commit( 'auth/user', { ...this.user, email });
+        },
+        updateName( name ){
+
+            this.$store.commit( 'auth/user', { ...this.user, name });
+        },
+        updateUser(){
+
+            this.updatingUser = true;
+            this.$store.dispatch( 'users/update_user', this.user )
+            .then( res => {
+
+                this.showMessage( 'User modified ok!' );
+            })
+            .catch( err => {
+
+                console.dir( err );
+                this.showError( err );
+            })
+        },
+        editUser(){
+
+            this.editingUser = true;
+            this.$nextTick( this.$refs.email.focus );
+        },
+        logout(){
+
+            this.logoutLoading = true;
+            this.$store.dispatch( 'auth/logout' )
+            .then( res => {
+
+                window.location = '/home';
+            })
+            .catch( err => {
+
+                console.log( err );
+            })
+            .then( () => {
+
+                this.logoutLoading = false;
+            })
+        },
+        changePassword () {
+
+            this.changingPassword = true;
+            this.$store.dispatch( 'auth/remember_password', this.user.email ).then( response => {
+
+              this.showMessage( 'Email sent to change password' );
+            }).catch( error => {
+
+              console.dir( error );
+              this.showError( error );
+            }).then(() => {
+
+              this.changingPassword = false;
+            })
+        }
+    },
+    computed: {
+
+        ...mapGetters({
+
+            user : 'auth/user'
+        })
+    },
+    mounted(){
+
+        this.$store.commit( 'auth/user', window.user );
+    }
 });

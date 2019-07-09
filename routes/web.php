@@ -11,17 +11,14 @@
 |
 */
 
-Route::get( '/', 'HomeController@index' )->name( 'home' );
+// The front splashpage
+Route::get( '/home/{action?}', 'AppController@homepage' )->name( 'home' );
+Route::get( '/', 'AppController@homepage' );
 
 Auth::routes();
 
-Route::get( '/timeboxer', 'AppController@timeboxer' )->name( 'timeboxer' );
-
 Route::middleware([ 'auth' ])->group( function(){
 
-    Route::get( '/dashboard', 'AppController@index' )->name( 'app.dashboard' );
-    Route::get( '/home', 'AppController@index' )->name( 'app.home' );
-
-    Route::resource( 'routines', 'RoutineController' );
-    Route::resource( 'tasks', 'TaskController' );
+    // the main app
+    Route::get( '/{any}', 'AppController@dashboard' )->where( 'any', '.*' )->name( 'app' );
 });

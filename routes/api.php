@@ -13,6 +13,27 @@ use Illuminate\Http\Request;
 |
 */
 
-Route::middleware('auth:api')->get('/user', function (Request $request) {
+Route::middleware( 'auth:api' )->get( '/user', function ( Request $request ) {
+
     return $request->user();
+});
+
+Route::group([ 'prefix' => 'v1', 'middleware' => 'auth:api' ], function()
+{
+
+    Route::put( '/user', 'LoggedUserController@update' );
+
+    Route::resource( 'routines', 'RoutineApiController' );
+
+    Route::get( 'tasks/deleted', 'TaskApiController@deleted' )->name( 'tasks.deleted' );
+    Route::resource( 'tasks', 'TaskApiController' );
+});
+
+Route::get( 'testing', function(){
+
+    return [
+
+        'onething' => 1337,
+        'another' => 'fuck facism'
+    ];
 });
