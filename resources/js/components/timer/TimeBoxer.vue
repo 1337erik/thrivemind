@@ -80,7 +80,7 @@
                     this.newInterval.time = '';
                 } else {
 
-                    console.log( 'incorrect shit' );
+                    console.log( 'incorrect' );
                 }
             },
             toggleDirection(){ this.direction *= -1; },

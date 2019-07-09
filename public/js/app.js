@@ -3208,7 +3208,7 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
         this.newInterval.name = '';
         this.newInterval.time = '';
       } else {
-        console.log('incorrect shit');
+        console.log('incorrect');
       }
     },
     toggleDirection: function toggleDirection() {

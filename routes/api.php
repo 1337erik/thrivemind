@@ -29,11 +29,11 @@ Route::group([ 'prefix' => 'v1', 'middleware' => 'auth:api' ], function()
     Route::resource( 'tasks', 'TaskApiController' );
 });
 
+
 Route::get( 'testing', function(){
 
     return [
 
-        'onething' => 1337,
-        'another' => 'fuck facism'
+        'onething' => 1337
     ];
 });
