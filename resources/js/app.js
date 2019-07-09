@@ -74,19 +74,14 @@ Vue.config.productionTip = false;
  */
 
 import Echo from 'laravel-echo';
-
-// window.Pusher = require('pusher-js');
-window.io = require( 'socket.io-client' );
+import Pusher from 'pusher-js';
 
 window.Echo = new Echo({
 
-    broadcaster : 'socket.io',
-    host        : window.location.hostname + ':6001'
-
-    // broadcaster: 'pusher',
-    // key: process.env.MIX_PUSHER_APP_KEY,
-    // cluster: process.env.MIX_PUSHER_APP_CLUSTER,
-    // encrypted: true
+    broadcaster : 'pusher',
+    key         : 'ce00d1a2986a5d113e68', // process.env.MIX_PUSHER_APP_KEY,
+    cluster     : 'us2', // process.env.MIX_PUSHER_APP_CLUSTER,
+    encrypted   : true
 });
 
 

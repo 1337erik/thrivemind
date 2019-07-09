@@ -1,6 +1,7 @@
 <?php
 
 use Illuminate\Http\Request;
+use App\Activity;
 
 /*
 |--------------------------------------------------------------------------
@@ -22,6 +23,12 @@ Route::group([ 'prefix' => 'v1', 'middleware' => 'auth:api' ], function()
 {
 
     Route::put( '/user', 'LoggedUserController@update' );
+
+    Route::get( '/activity', function(){
+
+        $activity = Activity::where( 'user_id', auth()->id() )->get();
+        return response()->json( $activity );
+    })->name( 'activity.index' );
 
     Route::resource( 'routines', 'RoutineApiController' );
 

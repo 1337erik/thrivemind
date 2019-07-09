@@ -4,6 +4,7 @@ namespace App\Observers;
 
 use App\Task;
 use App\Activity;
+use App\Events\ActivityRecorded;
 
 /**
  * 
@@ -32,12 +33,16 @@ class TaskObserver
     protected function recordActivity( $entity, $description )
     {
 
-        $entity->activity()->create([
+        $newActivity = $entity->activity()->create([
 
             'user_id'     => $entity->user_id,
             // 'task_id'     => $entity->id,
             'description' => $description
         ]);
+
+        // broadcast the system event for pub/sub and queueing
+        // ActivityRecorded::dispatch( $newActivity->toArray() );
+        event( new ActivityRecorded( $newActivity ) );
     }
 
     /**

@@ -49,7 +49,7 @@ class ManageTaskRequest extends FormRequest
             'description' => 'nullable',
             'notes'       => 'nullable',
             'due_date'    => 'date',
-            'duration'    => 'numeric'
+            'duration'    => 'nullable|numeric'
         ];
     }
 
